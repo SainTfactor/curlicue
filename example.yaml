@@ -1,0 +1,48 @@
+user_agent: "Mozilla/5.0 (compatible; MSIE 9.0; Windows NT 6.0; Trident/5.0; Trident/5.0)"
+actions:
+  - get_form:
+      url: "http://example.com/login"
+      name: "user_login_form" # necessary because the login page has 2 forms.
+      store: "login_form"
+
+  - display_form:
+      store: "login_form"
+
+  # Output generated at this stage showing:
+  #   method: POST
+  #   action: http://example.com/login
+  #   values:
+  #     - name: csrf_token
+  #       value: 513e2399-cce9-450c-9c42-1b48d9973eef
+  #     - name: username
+  #       value: <empty>
+  #     - name: password
+  #       value: <empty>
+
+  - update_form:
+      store: "login_form"
+      values:
+        - name: "username"
+          value: "test_user"
+        - name: "password"
+          value: "p@ssw0rd"
+
+  - submit_form:
+      store: "login_form"
+
+  # All cookies generated are stored for the duration
+  # Cookies will be passed to subsequent calls
+  # Since you are now logged in, we can post to the add_event page
+
+  - create_form:
+      store: "add_event_form"
+      method: "POST"
+      url: "http://example.com/add_event"
+      values:
+        - name: "name"
+          value: "Tyler's Birthday"
+        - name: "date"
+          value: "8-13-1991"
+
+  - submit_form:
+      store: "add_event_form"

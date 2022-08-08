@@ -1,0 +1,26 @@
+user_agent: "<your user agent string.  Default is curlicue/version.number>"
+actions: # Can be specified in any number or order.  Executes sequentially. 
+  - get_form:
+      url: "URL of the form to fetch"
+      store: "variable to store the form"
+      name: "(optional) name of the form to get, if there is more than one form.  If string: first matches 'name' property, then 'id'.  If integer: gets form at index specified (zero indexed).  Default: get first form on page."
+  - create_form:
+      store: "variable to store the form"
+      method: "submit method (GET/POST/etc)"
+      url: "URL to submit the form to."
+      values:
+        - name: "input name"
+          value: "input value"
+        - name: "input name 2"
+          value: "input value 2"
+  - update_form:
+      store: "variable to update"
+      method: "(optional) new submit method"
+      url: "(optional) new URL to submit the form to."
+      values: # adds or overrides
+        - name: "new input name"
+          value: "new input value"
+  - display_form:
+      store: "variable of form to display"
+  - submit_form:
+      store: "variable of form to submit"
