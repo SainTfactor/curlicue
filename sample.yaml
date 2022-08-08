@@ -20,7 +20,8 @@ actions: # Can be specified in any number or order.  Executes sequentially.
       values: # adds or overrides
         - name: "new input name"
           value: "new input value"
-  - display_form:
+  - display_form: # one of the following is required.  Store takes priority
+      url: "url of form to display"
       store: "variable of form to display"
   - submit_form:
       store: "variable of form to submit"

@@ -1,5 +1,30 @@
 user_agent: "Mozilla/5.0 (compatible; MSIE 9.0; Windows NT 6.0; Trident/5.0; Trident/5.0)"
 actions:
+
+  - display_form:
+      url: "http://example.com/login"
+     
+  # Output generated at this stage showing:
+  #   name: search_form
+  #   id: search
+  #   method: GET
+  #   action: http://example.com/search
+  #   values:
+  #     - name: search_term
+  #       value: <empty>
+  #
+  #   name: user_login_form
+  #   id: user_login_form
+  #   method: POST
+  #   action: http://example.com/login
+  #   values:
+  #     - name: csrf_token
+  #       value: 513e2399-cce9-450c-9c42-1b48d9973eef
+  #     - name: username
+  #       value: <empty>
+  #     - name: password
+  #       value: <empty>
+
   - get_form:
       url: "http://example.com/login"
       name: "user_login_form" # necessary because the login page has 2 forms.
