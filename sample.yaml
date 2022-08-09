@@ -3,12 +3,14 @@ actions: # Can be specified in any number or order.  Executes sequentially.
   - get_user_input:
       prompt: "some text prompt"
       store: "variable to store data" # variables can be accessed in strings via the ~~var_name~~ syntax
+      hidden: False # Optional - if true, replace text with asterisks.
   - fetch_from_url:
       url: "URL to fetch data from"
       save_response: "(optional) if specified, save response data to file name provided"
   - get_form:
       url: "URL of the form to fetch"
       store: "variable to store the form"
+      verbose: False # Optional - will display all forms if True
       id: "(optional) id of the form element to get"     # If multiple of the following 3 specified, evaluated in this order.
       name: "(optional) name of the form element to get" # If multiple forms and none specified, last form is selected.
       index: "(optional) index of the form to get"

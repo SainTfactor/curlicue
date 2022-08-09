@@ -3,6 +3,7 @@ import sys
 import yaml
 import requests
 import argparse
+import maskpass
 from bs4 import BeautifulSoup
 
 def import_tasks(path):
@@ -14,11 +15,13 @@ def import_tasks(path):
       print(err, file=sys.stderr)
   return retval
 
-def get_forms(html):
+def get_forms(html, verbose=False):
   forms = []
   soup = BeautifulSoup(html, 'html.parser')
   for form in soup.find_all('form'):
     form_obj = {"values" : []}
+    form_obj["id"] = form.get('id')
+    form_obj["name"] = form.get('name')
     form_obj["action"] = form.get('action')
     form_obj["method"] = form.get('method')
     for item in form.descendants:
@@ -28,6 +31,9 @@ def get_forms(html):
           "value" : item.get("value")
         })
     forms.append(form_obj)
+  if verbose:
+    for form in forms:
+      print_form(form)
   return forms
 
 def make_request(url, method, session, headers, data=None):
@@ -48,12 +54,29 @@ def make_request(url, method, session, headers, data=None):
     return None
 
 def sub_vars(data, variables):
-  for item in data.keys():
+  if type(data) == dict:
+    loopy = data.keys()
+  else:
+    loopy = range(len(data))
+  for item in loopy:
     if type(data[item]) == str:
-      for var in variables:
+      for var in [v for v in variables if type(variables[v]) == str]:
         data[item] = data[item].replace("~~{}~~".format(var), variables[var])
-    else:
+    elif type(data[item]) != bool:
       sub_vars(data[item], variables)
+
+def print_form(form_data):
+  if "id" in form_data:
+    print("id: {}".format(form_data["id"]))
+  if "name" in form_data:
+    print("name: {}".format(form_data["name"]))
+  print("method: {}".format(form_data["method"]))
+  print("action: {}".format(form_data["action"]))
+  print("values:")
+  for v in form_data["values"]:
+    print(" - name: {}".format(v["name"]))
+    print("   value: {}".format(v["value"]))
+ 
 
 if __name__ == "__main__":
 
@@ -75,7 +98,10 @@ if __name__ == "__main__":
     action = raw_action[action_name]
 
     if action_name == "get_user_input":
-      variables[action["store"]] = input(action["prompt"])
+      if "hidden" in action and action["hidden"]:
+        variables[action["store"]] = maskpass.askpass(prompt=action["prompt"], mask='*')
+      else:
+        variables[action["store"]] = input(action["prompt"])
     
     elif action_name == "fetch_from_url":
       data = make_request(action["url"], "get", session, headers)
@@ -84,7 +110,17 @@ if __name__ == "__main__":
     
     elif action_name == "get_form":
       data = make_request(action["url"], "get", session, headers)
-      forms = get_forms(data)
+      forms = get_forms(data, action["verbose"] if "verbose" in action else False)
+      if "id" in action:
+        form = [f for f in forms if f["id"] == action["id"]][0]
+        variables[action["store"]] = form
+      elif "name" in action:
+        form = [f for f in forms if f["name"] == action["name"]][0]
+        variables[action["store"]] = form
+      elif "index" in action:
+        variables[action["store"]] = forms[action["index"]]
+      else:
+        variables[action["store"]] = forms[-1]
     
     elif action_name == "create_form":
       variables[action["store"]] = { "values": [] }
@@ -96,8 +132,10 @@ if __name__ == "__main__":
     
     elif action_name == "update_form":
       form_data = variables[action["store"]]
-      form_data["method"] = action["method"]
-      form_data["action"] = action["action"]
+      if "method" in action:
+        form_data["method"] = action["method"]
+      if "action" in action:
+        form_data["action"] = action["action"]
       for new_val in action["values"]:
         for old_val in form_data["values"]:
           if new_val["name"] == old_val["name"]:
@@ -108,15 +146,11 @@ if __name__ == "__main__":
     
     elif action_name == "display_form":
       form_data = variables[action["store"]]
-      print("method: {}".format(form_data["method"]))
-      print("action: {}".format(form_data["action"]))
-      print("values:")
-      for v in form_data["values"]:
-        print(" - name: {}".format(v["name"]))
-        print("   value: {}".format(v["value"]))
-    
+      print_form(form_data)
+
     elif action_name == "submit_form":
-      data = make_request(action["url"], action["method"], session, headers, variables[action["store"]])
+      form_data = variables[action["store"]]
+      data = make_request(form_data["action"], form_data["method"], session, headers, form_data["values"])
       if "save_response" in action:
         with open(action["save_response"], "wb") as f:
           f.write(data)

@@ -1,7 +1,24 @@
 actions:
   - get_user_input:
-      prompt: "Some URL: "
-      store: "my_url"
+      prompt: "Password: "
+      store: "password"
+      hidden: True
+  - get_form:
+      url: "https://github.com/login"
+      store: "my_form"
+      #verbose: True
+  - update_form:
+      store: "my_form"
+      action: "https://github.com/session"
+      values:
+        - name: "login"
+          value:  "SainTfactor"
+        - name: "password" 
+          value: "~~password~~"
+  - display_form:
+      store: "my_form"
+  - submit_form:
+      store: "my_form"
   - fetch_from_url:
-      url: "~~my_url~~"
-      save_response: "/tmp/image.jpg"
+      url: "https://github.com/SainTfactor/InventoryManager/raw/master/SCA%20INVENTORY%20MANAGER.pdf"
+      save_response: "/tmp/test.pdf"
