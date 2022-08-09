@@ -28,7 +28,12 @@ def soup_test(text):
     forms.append(form_obj)
   return forms
 
-data = requests.get("http://stackoverflow.com/").text
+headers = {
+    'User-Agent': 'curlicue/0.1',
+}
+
+session = requests.Session()
+data = session.get("http://stackoverflow.com/", headers=headers).text
 forms = soup_test(data)
 print(forms)
 
