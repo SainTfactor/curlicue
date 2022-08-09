@@ -35,4 +35,5 @@ actions: # Can be specified in any number or order.  Executes sequentially.
       store: "variable of form to display"
   - submit_form:
       store: "variable of form to submit"
+      debug: False # Optional - output the response to screen if true, to validate form submission was successful
       save_response: "(optional) if specified, save response data to file name provided"

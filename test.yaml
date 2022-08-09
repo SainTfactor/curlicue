@@ -1,24 +1,35 @@
+user_agent: "Mozilla/5.0 (compatible; MSIE 9.0; Windows NT 6.0; Trident/5.0; Trident/5.0)"
 actions:
   - get_user_input:
       prompt: "Password: "
       store: "password"
       hidden: True
   - get_form:
-      url: "https://github.com/login"
+      url: "https://gitlab.com/users/sign_in/"
       store: "my_form"
-      #verbose: True
+      verbose: True
+  - get_user_input:
+      prompt: "URL: "
+      store: "url"
   - update_form:
       store: "my_form"
-      action: "https://github.com/session"
-      values:
-        - name: "login"
-          value:  "SainTfactor"
-        - name: "password" 
-          value: "~~password~~"
-  - display_form:
-      store: "my_form"
+      action: "~~url~~"
   - submit_form:
       store: "my_form"
-  - fetch_from_url:
-      url: "https://github.com/SainTfactor/InventoryManager/raw/master/SCA%20INVENTORY%20MANAGER.pdf"
-      save_response: "/tmp/test.pdf"
+      debug: True
+  #- update_form:
+  #    store: "my_form"
+  #    action: "https://github.com/session"
+  #    values:
+  #      - name: "login"
+  #        value:  "SainTfactor"
+  #      - name: "password" 
+  #        value: "~~password~~"
+  #- display_form:
+  #    store: "my_form"
+  #- submit_form:
+  #    store: "my_form"
+  #    debug: True
+  #- fetch_from_url:
+  #    url: "https://github.com/SainTfactor/InventoryManager/raw/master/SCA%20INVENTORY%20MANAGER.pdf"
+  #    save_response: "/tmp/test.pdf"

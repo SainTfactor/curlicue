@@ -36,19 +36,19 @@ def get_forms(html, verbose=False):
       print_form(form)
   return forms
 
-def make_request(url, method, session, headers, data=None):
+def make_request(url, method, session, data=None):
   if method.lower() == "get":
-    return session.get(url, params=data, headers=headers).content
+    return session.get(url, params=data).content
   elif method.lower() == "post":
-    return session.post(url, data=data, headers=headers).content
+    return session.post(url, data=data).content
   elif method.lower() == "put":
-    return session.put(url, data=data, headers=headers).content
+    return session.put(url, data=data).content
   elif method.lower() == "delete":
-    return session.delete(url, headers=headers).content
+    return session.delete(url).content
   elif method.lower() == "options":
-    return session.options(url, params=data, headers=headers).content
+    return session.options(url, params=data).content
   elif method.lower() == "head":
-    return session.head(url, headers=headers).content
+    return session.head(url).content
   else:
     print("Error: Unsupported HTTP verb.", file=sys.stderr)
     return None
@@ -91,6 +91,8 @@ if __name__ == "__main__":
   if "user_agent" in script:
     headers["User-Agent"] = script["user_agent"]
 
+  session.headers.update(headers)
+
   variables = {}
   for raw_action in script["actions"]:
     sub_vars(raw_action, variables)
@@ -104,12 +106,12 @@ if __name__ == "__main__":
         variables[action["store"]] = input(action["prompt"])
     
     elif action_name == "fetch_from_url":
-      data = make_request(action["url"], "get", session, headers)
+      data = make_request(action["url"], "get", session)
       with open(action["save_response"], "wb") as f:
         f.write(data)
     
     elif action_name == "get_form":
-      data = make_request(action["url"], "get", session, headers)
+      data = make_request(action["url"], "get", session)
       forms = get_forms(data, action["verbose"] if "verbose" in action else False)
       if "id" in action:
         form = [f for f in forms if f["id"] == action["id"]][0]
@@ -136,7 +138,7 @@ if __name__ == "__main__":
         form_data["method"] = action["method"]
       if "action" in action:
         form_data["action"] = action["action"]
-      for new_val in action["values"]:
+      for new_val in action["values"] if "values" in action else []:
         for old_val in form_data["values"]:
           if new_val["name"] == old_val["name"]:
             old_val["value"] = new_val["value"]
@@ -150,7 +152,9 @@ if __name__ == "__main__":
 
     elif action_name == "submit_form":
       form_data = variables[action["store"]]
-      data = make_request(form_data["action"], form_data["method"], session, headers, form_data["values"])
+      data = make_request(form_data["action"], form_data["method"], session, form_data["values"])
+      if "debug" in action and action["debug"]:
+        print(data)
       if "save_response" in action:
         with open(action["save_response"], "wb") as f:
           f.write(data)
