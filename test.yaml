@@ -1,0 +1,7 @@
+actions:
+  - get_user_input:
+      prompt: "Some URL: "
+      store: "my_url"
+  - fetch_from_url:
+      url: "~~my_url~~"
+      save_response: "/tmp/image.jpg"

@@ -1,6 +1,13 @@
 user_agent: "Mozilla/5.0 (compatible; MSIE 9.0; Windows NT 6.0; Trident/5.0; Trident/5.0)"
 actions:
 
+  - get_user_input:
+      prompt: "Username: "
+      store: username
+  - get_user_input:
+      prompt: "Password"
+      store: password
+
   - display_form:
       url: "http://example.com/login"
      
@@ -27,7 +34,7 @@ actions:
 
   - get_form:
       url: "http://example.com/login"
-      name: "user_login_form" # necessary because the login page has 2 forms.
+      id: "user_login_form" # necessary because the login page has 2 forms.
       store: "login_form"
 
   - display_form:
@@ -48,9 +55,9 @@ actions:
       store: "login_form"
       values:
         - name: "username"
-          value: "test_user"
+          value: "~~username~~"
         - name: "password"
-          value: "p@ssw0rd"
+          value: "~~password~~"
 
   - submit_form:
       store: "login_form"
@@ -71,3 +78,4 @@ actions:
 
   - submit_form:
       store: "add_event_form"
+      save_response: "receipt.html"

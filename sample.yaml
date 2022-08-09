@@ -1,9 +1,17 @@
 user_agent: "<your user agent string.  Default is curlicue/version.number>"
 actions: # Can be specified in any number or order.  Executes sequentially. 
+  - get_user_input:
+      prompt: "some text prompt"
+      store: "variable to store data" # variables can be accessed in strings via the ~~var_name~~ syntax
+  - fetch_from_url:
+      url: "URL to fetch data from"
+      save_response: "(optional) if specified, save response data to file name provided"
   - get_form:
       url: "URL of the form to fetch"
       store: "variable to store the form"
-      name: "(optional) name of the form to get, if there is more than one form.  If string: first matches 'name' property, then 'id'.  If integer: gets form at index specified (zero indexed).  Default: get first form on page."
+      id: "(optional) id of the form element to get"     # If multiple of the following 3 specified, evaluated in this order.
+      name: "(optional) name of the form element to get" # If multiple forms and none specified, last form is selected.
+      index: "(optional) index of the form to get"
   - create_form:
       store: "variable to store the form"
       method: "submit method (GET/POST/etc)"
@@ -25,3 +33,4 @@ actions: # Can be specified in any number or order.  Executes sequentially.
       store: "variable of form to display"
   - submit_form:
       store: "variable of form to submit"
+      save_response: "(optional) if specified, save response data to file name provided"
