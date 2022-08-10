@@ -2,8 +2,8 @@
 import requests
 import argparse
 
-import lib.actions
-import lib.utilities
+import lib.actions as actions
+import lib.utilities as utilities
 
 if __name__ == "__main__":
 
@@ -40,6 +40,8 @@ if __name__ == "__main__":
       actions.display_form(action, variables, session) 
     elif action_name == "submit_form":
       actions.submit_form(action, variables, session) 
+    elif action_name == "show_cookies":
+      print(session.cookies) 
     else:
       utilities.log_err("Error: Unexpected command name.")
 

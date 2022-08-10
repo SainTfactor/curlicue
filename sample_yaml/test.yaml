@@ -5,31 +5,21 @@ actions:
       store: "password"
       hidden: True
   - get_form:
-      url: "https://gitlab.com/users/sign_in/"
+      url: "https://github.com/login"
       store: "my_form"
-      verbose: True
-  - get_user_input:
-      prompt: "URL: "
-      store: "url"
+      #verbose: True
   - update_form:
       store: "my_form"
-      action: "~~url~~"
+      values:
+        - name: "login"
+          value:  "SainTfactor"
+        - name: "password" 
+          value: "~~password~~"
+  - display_form:
+      store: "my_form"
   - submit_form:
       store: "my_form"
-      debug: True
-  #- update_form:
-  #    store: "my_form"
-  #    action: "https://github.com/session"
-  #    values:
-  #      - name: "login"
-  #        value:  "SainTfactor"
-  #      - name: "password" 
-  #        value: "~~password~~"
-  #- display_form:
-  #    store: "my_form"
-  #- submit_form:
-  #    store: "my_form"
-  #    debug: True
+      #debug: True
   #- fetch_from_url:
   #    url: "https://github.com/SainTfactor/InventoryManager/raw/master/SCA%20INVENTORY%20MANAGER.pdf"
   #    save_response: "/tmp/test.pdf"

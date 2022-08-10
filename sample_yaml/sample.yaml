@@ -1,5 +1,6 @@
 user_agent: "<your user agent string.  Default is curlicue/version.number>"
 actions: # Can be specified in any number or order.  Executes sequentially. 
+  - show_cookies: # View current set of cookies in the session
   - get_user_input:
       prompt: "some text prompt"
       store: "variable to store data" # variables can be accessed in strings via the ~~var_name~~ syntax
