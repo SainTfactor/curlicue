@@ -2,8 +2,8 @@
 import requests
 import argparse
 
-import actions
-import utilities
+import lib.actions
+import lib.utilities
 
 if __name__ == "__main__":
 
