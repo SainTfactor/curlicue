@@ -19,30 +19,29 @@ def get_forms(html, verbose=False):
   forms = []
   soup = BeautifulSoup(html, 'html.parser')
   for form in soup.find_all('form'):
-    form_obj = {"form_data" : []}
+    form_obj = {}
     form_obj["id"] = form.get('id')
     form_obj["name"] = form.get('name')
     form_obj["action"] = form.get('action')
     form_obj["method"] = form.get('method')
     for item in form.descendants:
       if item.name == 'input':
-        form_obj["form_data"].append({ 
-          "name" : item.get("name"), 
-          "value" : item.get("value")
-        })
+        if not "form_data" in form_obj:
+          form_obj["form_data"] = {}
+        form_obj["form_data"][item.get("name")] = item.get("value")
     forms.append(form_obj)
   if verbose:
     for form in forms:
       print_form(form)
   return forms
 
-def make_request(url, method, session, data=None):
+def make_request(url, method, session, query_params=None, form_data=None, json_data=None):
   if method.lower() == "get":
-    return session.get(url, params=data).content
+    return session.get(url, params=query_params).content
   elif method.lower() == "post":
-    return session.post(url, data=data).content
+    return session.post(url, params=query_params, data=form_data, json=json_data).content
   elif method.lower() == "put":
-    return session.put(url, data=data).content
+    return session.put(url, params=query_params, data=form_data, json=json_data).content
   elif method.lower() == "delete":
     return session.delete(url).content
   elif method.lower() == "options":
@@ -73,15 +72,12 @@ def print_form(form_data):
   print("method: {}".format(form_data["method"]))
   print("action: {}".format(form_data["action"]))
   print("query_params:")
-  for v in form_data["query_params"]:
-    print(" - name: {}".format(v["name"]))
-    print("   value: {}".format(v["value"]))
+  for v in form_data["query_params"] if "query_params" in form_data else []:
+    print(" {}: {}".format(v, form_data["query_params"][v]))
   print("form_data:")
-  for v in form_data["form_data"]:
-    print(" - name: {}".format(v["name"]))
-    print("   value: {}".format(v["value"]))
+  for v in form_data["form_data"] if "form_data" in form_data else []:
+    print(" {}: {}".format(v, form_data["form_data"][v]))
   print("json_data:")
-  for v in form_data["json_data"]:
-    print(" - name: {}".format(v["name"]))
-    print("   value: {}".format(v["value"]))
+  for v in form_data["json_data"] if "json_data" in form_data else []:
+    print(" {}: {}".format(v, form_data["form_data"][v]))
  

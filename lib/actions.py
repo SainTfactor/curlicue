@@ -56,8 +56,8 @@ def update_form(action, variables):
     if not "query_params" in form_data:
       form_data["query_params"] = []
     for old_val in form_data["query_params"]:
-      if new_val["name"] == old_val["name"]:
-        old_val["value"] = new_val["value"]
+      if new_val == old_val:
+        form_data["query_params"][new_val] = action["query_params"][new_val]
         break
     else:
       form_data["query_params"].append(new_val)
@@ -65,8 +65,8 @@ def update_form(action, variables):
     if not "form_data" in form_data:
       form_data["form_data"] = []
     for old_val in form_data["form_data"]:
-      if new_val["name"] == old_val["name"]:
-        old_val["value"] = new_val["value"]
+      if new_val == old_val:
+        form_data["form_data"][new_val] = action["form_data"][new_val]
         break
     else:
       form_data["form_data"].append(new_val)
@@ -74,8 +74,8 @@ def update_form(action, variables):
     if not "json_data" in form_data:
       form_data["json_data"] = []
     for old_val in form_data["json_data"]:
-      if new_val["name"] == old_val["name"]:
-        old_val["value"] = new_val["value"]
+      if new_val == old_val:
+        form_data["json_data"][new_val] = action["json_data"][new_val]
         break
     else:
       form_data["json_data"].append(new_val)
