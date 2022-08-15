@@ -16,21 +16,17 @@ actions:
   #   id: search
   #   method: GET
   #   action: http://example.com/search
-  #   values:
-  #     - name: search_term
-  #       value: <empty>
+  #   form_data:
+  #     search_term: <empty>
   #
   #   name: user_login_form
   #   id: user_login_form
   #   method: POST
   #   action: http://example.com/login
-  #   values:
-  #     - name: csrf_token
-  #       value: 513e2399-cce9-450c-9c42-1b48d9973eef
-  #     - name: username
-  #       value: <empty>
-  #     - name: password
-  #       value: <empty>
+  #   form_data:
+  #     csrf_token: 513e2399-cce9-450c-9c42-1b48d9973eef
+  #     username: <empty>
+  #     password: <empty>
 
   - get_form:
       url: "http://example.com/login"
@@ -43,21 +39,16 @@ actions:
   # Output generated at this stage showing:
   #   method: POST
   #   action: http://example.com/login
-  #   values:
-  #     - name: csrf_token
-  #       value: 513e2399-cce9-450c-9c42-1b48d9973eef
-  #     - name: username
-  #       value: <empty>
-  #     - name: password
-  #       value: <empty>
+  #   form_data:
+  #     csrf_token: 513e2399-cce9-450c-9c42-1b48d9973eef
+  #     username: <empty>
+  #     password: <empty>
 
   - update_form:
       store: "login_form"
-      values:
-        - name: "username"
-          value: "~~username~~"
-        - name: "password"
-          value: "~~password~~"
+      form_data:
+        username: "~~username~~"
+        password: "~~password~~"
 
   - submit_form:
       store: "login_form"
@@ -70,11 +61,9 @@ actions:
       store: "add_event_form"
       method: "POST"
       url: "http://example.com/add_event"
-      values:
-        - name: "name"
-          value: "Tyler's Birthday"
-        - name: "date"
-          value: "8-13-1991"
+      form_data:
+        name: "Tyler's Birthday"
+        date: "8-13-1991"
 
   - submit_form:
       store: "add_event_form"

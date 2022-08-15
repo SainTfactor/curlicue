@@ -19,18 +19,34 @@ actions: # Can be specified in any number or order.  Executes sequentially.
       store: "variable to store the form"
       method: "submit method (GET/POST/etc)"
       url: "URL to submit the form to."
-      values:
-        - name: "input name"
-          value: "input value"
-        - name: "input name 2"
-          value: "input value 2"
+      form_data:
+        field1: "value1"
+        field2: "value2"
+      json_data:
+        obj1: 
+          prop1: "value1"
+          prop2: "value2"
+        obj2:
+          prop3: "value3"
+      query_params:
+        param1: "value1"
+        param2: "value2"
   - update_form:
       store: "variable to update"
       method: "(optional) new submit method"
       url: "(optional) new URL to submit the form to."
-      values: # adds or overrides
-        - name: "new input name"
-          value: "new input value"
+      form_data: # adds or overrides
+        field1: "value1"
+        field2: "value2"
+      json_data: # adds or overrides
+        obj1: 
+          prop1: "value1"
+          prop2: "value2"
+        obj2:
+          prop3: "value3"
+      query_params: # adds or overrides
+        param1: "value1"
+        param2: "value2"
   - display_form: # one of the following is required.  Store takes priority
       url: "url of form to display"
       store: "variable of form to display"

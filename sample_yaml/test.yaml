@@ -10,11 +10,9 @@ actions:
       #verbose: True
   - update_form:
       store: "my_form"
-      values:
-        - name: "login"
-          value:  "SainTfactor"
-        - name: "password" 
-          value: "~~password~~"
+      form_data:
+        login: "SainTfactor"
+        password: "~~password~~"
   - display_form:
       store: "my_form"
   - submit_form:
